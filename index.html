@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Pasangan Suami Istri Penyalaan lilin Adven 2026 - Paroki Katedral Jakarta</title>
+  <link rel="shortcut icon" href="candle.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header Image -->
+    <header class="form-header">
+      <img src="penyalalilin.jpg" alt="Header Penyalaan Lilin Adven 2026" class="header-img">
+    </header>
+
+    <!-- Intro Text -->
+    <section class="intro-box">
+      <h2>Pendaftaran Pasangan Suami Istri Penyalaan Lilin Adven 2026</h2>
+      <p class="subtitle">Paroki Katedral Jakarta</p>
+      <div class="intro-content">
+        <p>Syalom Bapak/Ibu Warga Paroki Katedral Jakarta yang terkasih! 🙏💚</p>
+        <p>Panitia Natal 2026 Wilayah Theresia dari Kanak-Kanak Yesus mengundang seluruh Wilayah dan kepengurusan Seksi untuk mengirim perwakilan Pasutri (Pasangan Suami Istri)untuk menjadi Petugas Penyala Lilin Adven .</p>
+        <p>Penyalaan lilin akan berlangsung Mulai dari Minggu Adven I - IV dengan jadwal Misa:</p>
+        <ul>
+          <li><strong>Sabtu:</strong> pk. 16.00 & 18.00</li>
+          <li><strong>Minggu:</strong> pk. 06.00, 08.30, 11.00, 16.30 & 19.00</li>
+        </ul>
+        <p>Pembagian tugas per-minggu dari wilayah/pengurus kategorial lain akan diingatkan melalui Whatsapp.</p>
+        <p><strong>Setiap wilayah / pengurus / kategorial lain wajib mengirimkan pasutri perwakilan.</strong></p>
+        <p class="deadline">Form diisi paling lambat 15 November 2026</p>
+      </div>
+    </section>
+
+    <!-- Main Form -->
+    <form id="advenForm" method="POST">
+      <!-- Honeypot Field (Hidden from normal users) -->
+      <div style="display:none;" aria-hidden="true">
+        <input type="text" name="mobile_number" id="mobile_number" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Option Buttons: Anda Mewakili -->
+      <fieldset class="form-section">
+        <legend>Anda mewakili : <span class="required">*</span></legend>
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="jalur" value="wilayah" checked onchange="toggleJalur()">
+            <span>Wilayah & Lingkungan</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="jalur" value="kategorial" onchange="toggleJalur()">
+            <span>Pengurus / Kategorial lain</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Section Wilayah & Lingkungan -->
+      <div id="sectionWilayah" class="form-section">
+        <div class="form-group">
+          <label for="wilayah">Wilayah <span class="required">*</span></label>
+          <select id="wilayah" name="wilayah" onchange="onWilayahChange()" required>
+            <option value="">-- Pilih Wilayah --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="lingkungan">Lingkungan <span class="required">*</span></label>
+          <select id="lingkungan" name="lingkungan" required disabled>
+            <option value="">-- Pilih Wilayah Terlebih Dahulu --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section Pengurus / Kategorial -->
+      <div id="sectionKategorial" class="form-section hidden">
+        <div class="form-group">
+          <label for="kategorial">Pengurus / Kategorial Lain <span class="required">*</span></label>
+          <select id="kategorial" name="kategorial">
+            <option value="">-- Pilih Pengurus / Kategorial --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Detail Suami & Istri -->
+      <div class="form-section">
+        <h3>1. Data Suami</h3>
+        <div class="form-group">
+          <label for="nama_suami">Nama Suami <span class="required">*</span></label>
+          <input type="text" id="nama_suami" name="nama_suami" required placeholder="Nama lengkap Suami">
+        </div>
+        <div class="form-group">
+          <label for="hp_suami">No. HP/WA Suami <span class="required">*</span></label>
+          <input type="tel" id="hp_suami" name="hp_suami" required pattern="^08[0-9]{7,11}$" placeholder="Contoh: 08123456789">
+          <small class="hint">Harus diawali '08' diikuti 7-11 angka (total 9-13 digit)</small>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>2. Data Istri</h3>
+        <div class="form-group">
+          <label for="nama_istri">Nama Istri <span class="required">*</span></label>
+          <input type="text" id="nama_istri" name="nama_istri" required placeholder="Nama lengkap Istri">
+        </div>
+        <div class="form-group">
+          <label for="hp_istri">No. HP/WA Istri <span class="required">*</span></label>
+          <input type="tel" id="hp_istri" name="hp_istri" required pattern="^08[0-9]{7,11}$" placeholder="Contoh: 08123456789">
+          <small class="hint">Harus diawali '08' diikuti 7-11 angka (total 9-13 digit)</small>
+        </div>
+      </div>
+
+      <!-- Email Optional -->
+      <div class="form-section">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="nama@email.com">
+          <small class="hint">Isi jika menginginkan hasil Isian ini dikirimkan ke email Anda</small>
+        </div>
+      </div>
+
+      <button type="submit" id="btnSubmit" class="btn-submit">Kirim Pendaftaran</button>
+    </form>
+
+    <!-- Footer -->
+    <footer class="form-footer">
+      <p>Panitia Natal 2026 - Wil St. Theresia dari Kanak Kanak Yesus Katedral Jakarta</p>
+    </footer>
+  </div>
+
+  <!-- Modal Pop-up -->
+  <div id="customModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h3 id="modalTitle">Informasi</h3>
+      <div id="modalBody"></div>
+      <button onclick="closeModal()" class="btn-modal-close">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    // GANTI SCRIPT_URL DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+    const SCRIPT_URL = "YOUR_GAS_WEB_APP_URL_HERE";
+
+    let globalWilayahMap = {};
+
+    // Fungsi Sanitasi HTML untuk mencegah XSS
+    function sanitizeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Load Data via JSONP saat halaman pertama dibuka
+    window.onload = function() {
+      fetchDropdownJSONP();
+    };
+
+    function fetchDropdownJSONP() {
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=getDropdownData&callback=handleDropdownData`;
+      document.body.appendChild(script);
+    }
+
+    function handleDropdownData(data) {
+      if (data.status === 'success') {
+        globalWilayahMap = data.wilayahMap;
+        populateWilayahDropdown(data.wilayahMap);
+        populateKategorialDropdown(data.kategorialList);
+      } else {
+        alert("Gagal memuat data dropdown: " + sanitizeHTML(data.message));
+      }
+    }
+
+    function populateWilayahDropdown(map) {
+      const select = document.getElementById('wilayah');
+      select.innerHTML = '<option value="">-- Pilih Wilayah --</option>';
+      for (let wilayah in map) {
+        const opt = document.createElement('option');
+        opt.value = wilayah;
+        opt.textContent = wilayah;
+        select.appendChild(opt);
+      }
+    }
+
+    function populateKategorialDropdown(list) {
+      const select = document.getElementById('kategorial');
+      select.innerHTML = '<option value="">-- Pilih Pengurus / Kategorial --</option>';
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = item;
+        select.appendChild(opt);
+      });
+    }
+
+    function onWilayahChange() {
+      const selectedWilayah = document.getElementById('wilayah').value;
+      const lingkunganSelect = document.getElementById('lingkungan');
+      
+      lingkunganSelect.innerHTML = '<option value="">-- Pilih Lingkungan --</option>';
+      
+      if (selectedWilayah && globalWilayahMap[selectedWilayah]) {
+        lingkunganSelect.disabled = false;
+        globalWilayahMap[selectedWilayah].forEach(lingk => {
+          const opt = document.createElement('option');
+          opt.value = lingk;
+          opt.textContent = lingk;
+          lingkunganSelect.appendChild(opt);
+        });
+      } else {
+        lingkunganSelect.disabled = true;
+        lingkunganSelect.innerHTML = '<option value="">-- Pilih Wilayah Terlebih Dahulu --</option>';
+      }
+    }
+
+    function toggleJalur() {
+      const jalur = document.querySelector('input[name="jalur"]:checked').value;
+      const secWilayah = document.getElementById('sectionWilayah');
+      const secKategorial = document.getElementById('sectionKategorial');
+
+      const selectWilayah = document.getElementById('wilayah');
+      const selectLingkungan = document.getElementById('lingkungan');
+      const selectKategorial = document.getElementById('kategorial');
+
+      if (jalur === 'wilayah') {
+        secWilayah.classList.remove('hidden');
+        secKategorial.classList.add('hidden');
+        
+        selectWilayah.required = true;
+        selectLingkungan.required = true;
+        selectKategorial.required = false;
+        selectKategorial.value = "";
+      } else {
+        secWilayah.classList.add('hidden');
+        secKategorial.classList.remove('hidden');
+        
+        selectWilayah.required = false;
+        selectLingkungan.required = false;
+        selectKategorial.required = true;
+        selectWilayah.value = "";
+        selectLingkungan.value = "";
+        selectLingkungan.disabled = true;
+      }
+    }
+
+    // Modal Control
+    function showModal(title, bodyHtml) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      document.getElementById('customModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('customModal').classList.add('hidden');
+    }
+
+    // Form Submission
+    document.getElementById('advenForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const btnSubmit = document.getElementById('btnSubmit');
+      btnSubmit.disabled = true;
+      btnSubmit.innerText = "Mengirim...";
+
+      const formData = new FormData(this);
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(res => {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Kirim Pendaftaran";
+
+        if (res.result === 'duplicate') {
+          showModal("Pendaftaran Ditolak", `<p style="color: #c0392b;">${sanitizeHTML(res.message)}</p>`);
+        } else if (res.result === 'busy') {
+          showModal("Server Sibuk", `<p style="color: #e67e22;">${sanitizeHTML(res.message)}</p>`);
+        } else if (res.result === 'success') {
+          if (res.message === 'Bot detected') {
+            showModal("Terima Kasih", "<p>Pendaftaran Anda telah berhasil diproses.</p>");
+            return;
+          }
+
+          const d = res.details;
+          const detailHtml = `
+            <div class="success-report">
+              <p>🙏 <strong>Terima kasih atas pendaftarannya!</strong></p>
+              <p>Data Anda telah berhasil dicatat dalam sistem.</p>
+              <hr>
+              <p><strong>Detail Pendaftaran:</strong></p>
+              <ul>
+                ${d.jalur === 'wilayah' 
+                  ? `<li><strong>Wilayah:</strong> ${sanitizeHTML(d.wilayah)}</li><li><strong>Lingkungan:</strong>${sanitizeHTML(d.lingkungan)}</li>` 
+                  : `<li><strong>Pengurus/Kategorial:</strong> ${sanitizeHTML(d.kategorial)}</li>`}
+                <li><strong>Suami:</strong> ${sanitizeHTML(d.namaSuami)} (${sanitizeHTML(d.hpSuami)})</li>
+                <li><strong>Istri:</strong> ${sanitizeHTML(d.namaIstri)} (${sanitizeHTML(d.hpIstri)})</li>
+                ${d.email ? `<li><strong>Email Konfirmasi:</strong> ${sanitizeHTML(d.email)}</li>` : ''}
+              </ul>
+            </div>
+          `;
+          showModal("Pendaftaran Berhasil", detailHtml);
+          document.getElementById('advenForm').reset();
+          toggleJalur();
+        } else {
+          showModal("Gagal", `<p>Terjadi kesalahan: ${sanitizeHTML(res.message)}</p>`);
+        }
+      })
+      .catch(err => {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Kirim Pendaftaran";
+        showModal("Kesalahan Koneksi", `<p>Gagal mengirim data. Silakan periksa koneksi internet Anda.</p>`);
+      });
+    });
+  </script>
+</body>
+</html>
