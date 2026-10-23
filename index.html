@@ -301,8 +301,8 @@
                 ${d.jalur === 'wilayah' 
                   ? `<li><strong>Wilayah:</strong> ${sanitizeHTML(d.wilayah)}</li><li><strong>Lingkungan:</strong>${sanitizeHTML(d.lingkungan)}</li>` 
                   : `<li><strong>Pengurus/Kategorial:</strong> ${sanitizeHTML(d.kategorial)}</li>`}
-                <li><strong>Suami:</strong> ${sanitizeHTML(d.namaSuami)} (${sanitizeHTML(d.hpSuami)})</li>
-                <li><strong>Istri:</strong> ${sanitizeHTML(d.namaIstri)} (${sanitizeHTML(d.hpIstri)})</li>
+                <li><strong>Suami:</strong> ${sanitizeHTML(d.namaSuami)} (${sanitizeHTML(d.hpSuami.replace(/^'/, ''))})</li>
+                <li><strong>Istri:</strong> ${sanitizeHTML(d.namaIstri)} (${sanitizeHTML(d.hpIstri.replace(/^'/, ''))})</li>
                 ${d.email ? `<li><strong>Email Konfirmasi:</strong> ${sanitizeHTML(d.email)}</li>` : ''}
               </ul>
             </div>
