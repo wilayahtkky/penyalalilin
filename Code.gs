@@ -93,9 +93,9 @@ function doPost(e) {
     const kategorial = jalur === 'kategorial' ? (params.kategorial || '') : '';
 
     const namaSuami = params.nama_suami || '';
-    const hpSuami = params.hp_suami || '';
+    const hpSuami = params.hp_suami ? "'" + params.hp_suami : '';
     const namaIstri = params.nama_istri || '';
-    const hpIstri = params.hp_istri || '';
+    const hpIstri = params.hp_istri ? "'" + params.hp_istri : '';
     const email = params.email || '';
 
     // Cek Duplikasi di Sheet "penyalalilin"
@@ -107,15 +107,17 @@ function doPost(e) {
       const existingSuami = data[i][6];
       const existingIstri = data[i][8];
 
-      // Jika memilih jalur Wilayah: cek apakah Wilayah & Lingkungan sudah terdaftar
-      if (jalur === 'wilayah' && existingWilayah === wilayah && existingLingkungan === lingkungan) {
+      // === PERUBAHAN DI SINI (LOGIKA CEK WILAYAH) ===
+      // Hanya membandingkan Wilayah (tanpa mengecek Lingkungan)
+      if (jalur === 'wilayah' && existingWilayah === wilayah) {
         return ContentService.createTextOutput(
           JSON.stringify({
             result: 'duplicate',
-            message: `Maaf, Pendaftaran tidak dapat dilakukan, Sebab Lingkungan ${lingkungan} (${wilayah}) sudah terdaftar atas nama ${existingSuami} dan ${existingIstri}.`
+            message: `Maaf, Pendaftaran tidak dapat dilakukan, Sebab ${wilayah} sudah terdaftar atas nama ${existingSuami} dan ${existingIstri} dari lingkungan ${existingLingkungan}.`
           })
         ).setMimeType(ContentService.MimeType.JSON);
       }
+      // === AKHIR PERUBAHAN ===
 
       // Jika memilih jalur Kategorial: cek apakah Kategorial sudah terdaftar
       if (jalur === 'kategorial' && existingKategorial === kategorial) {
@@ -152,9 +154,9 @@ Berikut rincian data pendaftaran Anda:
 ID Pendaftaran : ${newId}
 Waktu          : ${Utilities.formatDate(timestamp, "GMT+7", "dd/MM/yyyy HH:mm:ss")} WIB
 Mewakili       : ${jalur === 'wilayah' ? 'Wilayah & Lingkungan' : 'Pengurus / Kategorial Lain'}
-${jalur === 'wilayah' ? `Wilayah        : ${wilayah}\nLingkungan     :${lingkungan}` : `Pengurus/Kategorial: ${kategorial}`}
-Nama Suami     : ${namaSuami} (${hpSuami})
-Nama Istri     : ${namaIstri} (${hpIstri})
+${jalur === 'wilayah' ? `Wilayah        : ${wilayah}\nLingkungan     : ${lingkungan}` : `Pengurus/Kategorial: ${kategorial}`}
+Nama Suami     : ${namaSuami} (${params.hp_suami || ''})
+Nama Istri     : ${namaIstri} (${params.hp_istri || ''})
 --------------------------------------------------
 
 Jadwal penugasan akan diingatkan kembali melalui WhatsApp.
