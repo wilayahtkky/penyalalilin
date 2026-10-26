@@ -184,7 +184,7 @@ select:disabled {
 }
 
 .btn-submit:hover {
-  background-color: #2600cf;
+  background-color: #003e64; //#2600cf;
 }
 
 .btn-submit:disabled {
