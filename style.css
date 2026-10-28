@@ -171,26 +171,54 @@ select:disabled {
 
 /* Buttons */
 .btn-submit {
+.btn-submit {
   width: 100%;
-  background-color: #5895bb;
-  color: white;
-  padding: 14px;
+  background: linear-gradient(135deg, #5895bb 0%, #003e64 100%);
+  color: #ffffff;
+  padding: 16px 24px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: bold;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-top: 15px;
+  position: relative;
+  
+  /* Bayangan Tebal 3D (Warna Biru Gelap) */
+  box-shadow: 0 6px 0 #002238, 
+              0 10px 15px rgba(0, 0, 0, 0.25);
+  
+  transition: all 0.15s ease-in-out;
+  transform: translateY(0);
+  outline: none;
 }
 
+/* Hover (Tombol sedikit naik) */
 .btn-submit:hover {
-  background-color: #003e64; //#2600cf;
+  background: linear-gradient(135deg, #6ba7cc 0%, #004f7c 100%);
+  box-shadow: 0 8px 0 #002238, 
+              0 14px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
 
-.btn-submit:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
+/* Active / Klik (Efek menekan tombol fisik) */
+.btn-submit:active {
+  box-shadow: 0 2px 0 #002238, 
+              0 4px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(4px);
 }
+
+/* Non-Aktif (Disabled) */
+.btn-submit:disabled {
+  background: #a0c4de;
+  box-shadow: 0 4px 0 #7094ad;
+  color: #ffffff;
+  cursor: not-allowed;
+  transform: translateY(0);
+  opacity: 0.7;
+}
+
 
 .hidden {
   display: none !important;
