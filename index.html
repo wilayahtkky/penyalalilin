@@ -35,7 +35,7 @@
 
     <!-- Main Form -->
     <form id="advenForm" method="POST">
-      <!-- Honeypot Field (Hidden from normal users) -->
+      <!-- Honeypot Field -->
       <div style="display:none;" aria-hidden="true">
         <input type="text" name="mobile_number" id="mobile_number" tabindex="-1" autocomplete="off">
       </div>
@@ -121,8 +121,8 @@
       <button type="submit" id="btnSubmit" class="btn-submit">Kirim Pendaftaran</button>
     </form>
 
-       <!-- Jadwal Image -->
-        <img src="jadwalpenyala.png" alt="Jadwal penyalalilin" class="jadwal-img" />
+    <!-- Jadwal Image -->
+    <img src="jadwalpenyala.png" alt="Jadwal penyalalilin" class="jadwal-img" />
 
     <!-- Footer -->
     <footer class="form-footer">
@@ -141,12 +141,10 @@
   </div>
 
   <script>
-    // GANTI SCRIPT_URL DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFj5WOnimskfzRq2_TdqijNo0GJ_TJEKNXjfO8g4QLd6dQO--PaSs75JijH1c-hnOCJg/exec";
 
     let globalWilayahMap = {};
 
-    // Fungsi Sanitasi HTML untuk mencegah XSS
     function sanitizeHTML(str) {
       if (!str) return '';
       return String(str)
@@ -157,7 +155,6 @@
         .replace(/'/g, '&#39;');
     }
 
-    // Load Data via JSONP saat halaman pertama dibuka
     window.onload = function() {
       fetchDropdownJSONP();
     };
@@ -250,15 +247,34 @@
       }
     }
 
-    // Modal Control
-    function showModal(title, bodyHtml) {
+    // Dynamic Modal Control
+    function showModal(title, bodyHtml, isSuccess = false) {
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalBody').innerHTML = bodyHtml;
+      
+      const modalBtn = document.querySelector('.btn-modal-close');
+      if (isSuccess) {
+        modalBtn.innerText = "TUTUP";
+        modalBtn.onclick = closeWindow;
+      } else {
+        modalBtn.innerText = "Tutup";
+        modalBtn.onclick = closeModal;
+      }
+
       document.getElementById('customModal').classList.remove('hidden');
     }
 
     function closeModal() {
       document.getElementById('customModal').classList.add('hidden');
+    }
+
+    function closeWindow() {
+      window.close();
+      setTimeout(function () {
+        if (!window.closed) {
+          window.location.href = "about:blank";
+        }
+      }, 300);
     }
 
     // Form Submission
@@ -286,7 +302,7 @@
           showModal("Server Sibuk", `<p style="color: #e67e22;">${sanitizeHTML(res.message)}</p>`);
         } else if (res.result === 'success') {
           if (res.message === 'Bot detected') {
-            showModal("Terima Kasih", "<p>Pendaftaran Anda telah berhasil diproses.</p>");
+            showModal("Terima Kasih", "<p>Pendaftaran Anda telah berhasil diproses.</p>", true);
             return;
           }
 
@@ -299,7 +315,7 @@
               <p><strong>Detail Pendaftaran:</strong></p>
               <ul>
                 ${d.jalur === 'wilayah' 
-                  ? `<li><strong>Wilayah:</strong> ${sanitizeHTML(d.wilayah)}</li><li><strong>Lingkungan:</strong>${sanitizeHTML(d.lingkungan)}</li>` 
+                  ? `<li><strong>Wilayah:</strong> ${sanitizeHTML(d.wilayah)}</li><li><strong>Lingkungan:</strong> ${sanitizeHTML(d.lingkungan)}</li>` 
                   : `<li><strong>Pengurus/Kategorial:</strong> ${sanitizeHTML(d.kategorial)}</li>`}
                 <li><strong>Suami:</strong> ${sanitizeHTML(d.namaSuami)} (${sanitizeHTML(d.hpSuami.replace(/^'/, ''))})</li>
                 <li><strong>Istri:</strong> ${sanitizeHTML(d.namaIstri)} (${sanitizeHTML(d.hpIstri.replace(/^'/, ''))})</li>
@@ -307,7 +323,7 @@
               </ul>
             </div>
           `;
-          showModal("Pendaftaran Berhasil", detailHtml);
+          showModal("Pendaftaran Berhasil", detailHtml, true);
           document.getElementById('advenForm').reset();
           toggleJalur();
         } else {
