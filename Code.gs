@@ -1,13 +1,15 @@
-const SPREADSHEET_ID = "1KOJamWs_pc15iqdGXyA4vR-NTeuKLXHWKZDjerbJPbo"; // Gunakan Spreadsheet reference "Wil Lingk K7"
-
+// SPREADSHEET IDs
+const MASTER_DROPDOWN_SS_ID = "1KOJamWs_pc15iqdGXyA4vR-NTeuKLXHWKZDjerbJPbo"; // "Wil Lingk K7"
+const FORM_RESPON_SS_ID     = "1P9hJCC_kVG0JgLwtBRhOHVOgU3yT6ImtMS9Z5kV-rL0"; // Sheet respon "penyalalilin"
+const JADWAL_SS_ID          = "1nU48nL0W7ehkle7FZIeEYZaYe7kfUlVgb3QFZYqiexc"; // Spreadsheet penyalalilinjadwal.xlsx ("jadwalpenyala")
 
 function doGet(e) {
-  const action = e.parameter.action;
-  const callback = e.parameter.callback;
+  const action = e ? e.parameter.action : '';
+  const callback = e ? e.parameter.callback : '';
 
-  // Endpoint JSONP untuk mengambil data dropdown
+  // 1. ENDPOINT JSONP: Dropdown Data (Form Pendaftaran)
   if (action === 'getDropdownData') {
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const ss = SpreadsheetApp.openById(MASTER_DROPDOWN_SS_ID);
     const sheet = ss.getSheetByName("wildanlingkKategorial");
     
     if (!sheet) {
@@ -15,7 +17,6 @@ function doGet(e) {
     }
 
     const values = sheet.getDataRange().getValues();
-    // Menggunakan slice(1) untuk mengabaikan baris header
     const rows = values.slice(1);
 
     const wilayahMap = {};
@@ -24,7 +25,6 @@ function doGet(e) {
     rows.forEach(function(row) {
       const wilayah = row[0] ? String(row[0]).trim() : "";
       
-      // Ambil Lingkungan (Kolom B sampai E / Index 1-4)
       if (wilayah) {
         const lingkungans = [];
         for (let i = 1; i <= 4; i++) {
@@ -35,7 +35,6 @@ function doGet(e) {
         wilayahMap[wilayah] = lingkungans;
       }
 
-      // Ambil Pengurus / Kategorial Lain (Kolom I / Index 8)
       if (row[8] && String(row[8]).trim() !== "") {
         kategorialList.push(String(row[8]).trim());
       }
@@ -48,7 +47,12 @@ function doGet(e) {
     });
   }
 
-  // Jika tidak ada action, tampilkan halaman jika di-deploy sebagai Web App
+  // 2. ENDPOINT JSONP: Report Data (report.html)
+  if (action === 'getReportData') {
+    return getReportDataResponse(callback);
+  }
+
+  // Fallback Web App Status
   return ContentService.createTextOutput("Service Active");
 }
 
@@ -56,7 +60,6 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   const hasLock = lock.tryLock(10000);
 
-  // Jika gagal mendapatkan kunci (antrian penuh / timeout)
   if (!hasLock) {
     return ContentService.createTextOutput(
       JSON.stringify({
@@ -75,7 +78,7 @@ function doPost(e) {
     }
 
     const params = e.parameter;
-    const ss = SpreadsheetApp.getActiveSpreadsheet(); // Gunakan Spreadsheet Aktif
+    const ss = SpreadsheetApp.openById(FORM_RESPON_SS_ID);
     let sheet = ss.getSheetByName("penyalalilin");
 
     if (!sheet) {
@@ -107,8 +110,6 @@ function doPost(e) {
       const existingSuami = data[i][6];
       const existingIstri = data[i][8];
 
-      // === PERUBAHAN DI SINI (LOGIKA CEK WILAYAH) ===
-      // Hanya membandingkan Wilayah (tanpa mengecek Lingkungan)
       if (jalur === 'wilayah' && existingWilayah === wilayah) {
         return ContentService.createTextOutput(
           JSON.stringify({
@@ -117,9 +118,7 @@ function doPost(e) {
           })
         ).setMimeType(ContentService.MimeType.JSON);
       }
-      // === AKHIR PERUBAHAN ===
 
-      // Jika memilih jalur Kategorial: cek apakah Kategorial sudah terdaftar
       if (jalur === 'kategorial' && existingKategorial === kategorial) {
         return ContentService.createTextOutput(
           JSON.stringify({
@@ -139,7 +138,7 @@ function doPost(e) {
       kategorial, namaSuami, hpSuami, namaIstri, hpIstri
     ]);
 
-    // Kirim Email Konfirmasi jika mengisi email
+    // Kirim Email Konfirmasi
     if (email !== '') {
       const senderName = 'Panitia Natal 2026 - Wilayah Theresia dari Kanak-Kanak Yesus';
       const subject = 'Pendaftaran Petugas Penyalaan Lilin Adven 2026';
@@ -202,6 +201,93 @@ Paroki Katedral Jakarta
     ).setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
+  }
+}
+
+// FUNGSI OLAH REPORT DATA UNTUK REPORT.HTML
+function getReportDataResponse(callback) {
+  try {
+    // 1. Ambil data Jadwal dari Spreadsheet "penyalalilinjadwal"
+    const ssJadwal = SpreadsheetApp.openById(JADWAL_SS_ID);
+    const sheetJadwal = ssJadwal.getSheetByName("jadwalpenyala");
+    const jadwalValues = sheetJadwal.getDataRange().getValues();
+    const jadwalRows = jadwalValues.slice(1);
+
+    // 2. Ambil data Respon dari Sheet "penyalalilin"
+    let responRows = [];
+    try {
+      const ssRespon = SpreadsheetApp.openById(FORM_RESPON_SS_ID);
+      const sheetRespon = ssRespon.getSheetByName("penyalalilin");
+      if (sheetRespon) {
+        responRows = sheetRespon.getDataRange().getValues().slice(1);
+      }
+    } catch (err) {
+      Logger.log("Gagal membuka sheet respon: " + err.toString());
+    }
+
+    // 3. Pencocokan Data Respon ke Jadwal
+    const reportList = jadwalRows.map(row => {
+      const no = row[0];
+      const tanggal = row[1] instanceof Date ? Utilities.formatDate(row[1], "GMT+7", "yyyy-MM-dd") : row[1];
+      
+      // PERBAIKAN FORMAT JAM (Mengabaikan Offset Historis Timezone 1899)
+      let jam = "";
+      if (row[2] instanceof Date) {
+        const h = String(row[2].getHours()).padStart(2, '0');
+        const m = String(row[2].getMinutes()).padStart(2, '0');
+        jam = `${h}:${m}`;
+      } else {
+        jam = String(row[2] || '');
+      }
+
+      const eventName = row[3];
+      const asalPetugas = String(row[4] || '').trim();
+
+      let namaSuami = "-";
+      let namaIstri = "-";
+
+      for (let i = 0; i < responRows.length; i++) {
+        const respWilayah = String(responRows[i][3] || '').trim();
+        const respKategorial = String(responRows[i][5] || '').trim();
+        const respSuami = responRows[i][6] || '-';
+        const respIstri = responRows[i][8] || '-';
+
+        let isMatch = false;
+
+        if (respWilayah !== "") {
+          if (respWilayah.toLowerCase() === asalPetugas.toLowerCase()) {
+            isMatch = true;
+          }
+        } else {
+          if (respKategorial !== "") {
+            if (respKategorial.toLowerCase() === asalPetugas.toLowerCase()) {
+              isMatch = true;
+            }
+          }
+        }
+
+        if (isMatch) {
+          namaSuami = respSuami;
+          namaIstri = respIstri;
+          break;
+        }
+      }
+
+      return {
+        no: no,
+        tanggal: tanggal,
+        jam: jam,
+        event: eventName,
+        asalPetugas: asalPetugas,
+        namaSuami: namaSuami,
+        namaIstri: namaIstri
+      };
+    });
+
+    return sendJsonpResponse(callback, { status: "success", data: reportList });
+
+  } catch (error) {
+    return sendJsonpResponse(callback, { status: "error", message: error.toString() });
   }
 }
 
