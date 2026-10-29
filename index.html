@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pendaftaran Pasangan Suami Istri Penyalaan lilin Adven 2026 - Paroki Katedral Jakarta</title>
   <link rel="shortcut icon" href="candle.png" type="image/png">
-<!-- Open Graph Meta Tags untuk WhatsApp & Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://tkky.my.id/penyalalilin" />
-<meta property="og:title" content="Pendaftaran petugas penyala lilin Adven" />
-<meta property="og:description" content="Setiap Misa Adven dibutuhkan Pasutri untuk bertugas sebagai penyala lilin Adven" />
-<meta property="og:image" content="https://tkky.my.id/penyalalilin/penyalalilin.jpg" />
-<meta property="og:image:secure_url" content="https://tkky.my.id/penyalalilin/penyalalilin.jpg" />
-<meta property="og:image:type" content="image/jpeg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="fb:app_id" content="123456789" />
+  <!-- Open Graph Meta Tags untuk WhatsApp & Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tkky.my.id/penyalalilin" />
+  <meta property="og:title" content="Pendaftaran petugas penyala lilin Adven" />
+  <meta property="og:description" content="Setiap Misa Adven dibutuhkan Pasutri untuk bertugas sebagai penyala lilin Adven" />
+  <meta property="og:image" content="https://tkky.my.id/penyalalilin/penyalalilin.jpg" />
+  <meta property="og:image:secure_url" content="https://tkky.my.id/penyalalilin/penyalalilin.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="fb:app_id" content="123456789" />
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
@@ -57,39 +57,39 @@
         <legend>Anda mewakili : <span class="required">*</span></legend>
         <div class="radio-group">
           <label class="radio-card">
-            <input type="radio" name="jalur" value="wilayah" checked onchange="toggleJalur()">
-            <span>Wilayah & Lingkungan</span>
+            <input type="radio" name="jalur" value="kategorial" checked onchange="toggleJalur()">
+            <span>Pengurus / Kategorial lain</span>
           </label>
           <label class="radio-card">
-            <input type="radio" name="jalur" value="kategorial" onchange="toggleJalur()">
-            <span>Pengurus / Kategorial lain</span>
+            <input type="radio" name="jalur" value="wilayah" onchange="toggleJalur()">
+            <span>Wilayah & Lingkungan</span>
           </label>
         </div>
       </fieldset>
 
-      <!-- Section Wilayah & Lingkungan -->
-      <div id="sectionWilayah" class="form-section">
+      <!-- Section Pengurus / Kategorial (Tampil Default) -->
+      <div id="sectionKategorial" class="form-section">
+        <div class="form-group">
+          <label for="kategorial">Pengurus / Kategorial Lain <span class="required">*</span></label>
+          <select id="kategorial" name="kategorial" required>
+            <option value="">-- Pilih Pengurus / Kategorial --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section Wilayah & Lingkungan (Tersembunyi Default) -->
+      <div id="sectionWilayah" class="form-section hidden">
         <div class="form-group">
           <label for="wilayah">Wilayah <span class="required">*</span></label>
-          <select id="wilayah" name="wilayah" onchange="onWilayahChange()" required>
+          <select id="wilayah" name="wilayah" onchange="onWilayahChange()">
             <option value="">-- Pilih Wilayah --</option>
           </select>
         </div>
 
         <div class="form-group">
           <label for="lingkungan">Lingkungan <span class="required">*</span></label>
-          <select id="lingkungan" name="lingkungan" required disabled>
+          <select id="lingkungan" name="lingkungan" disabled>
             <option value="">-- Pilih Wilayah Terlebih Dahulu --</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Section Pengurus / Kategorial -->
-      <div id="sectionKategorial" class="form-section hidden">
-        <div class="form-group">
-          <label for="kategorial">Pengurus / Kategorial Lain <span class="required">*</span></label>
-          <select id="kategorial" name="kategorial">
-            <option value="">-- Pilih Pengurus / Kategorial --</option>
           </select>
         </div>
       </div>
